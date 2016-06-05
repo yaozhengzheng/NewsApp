@@ -2,8 +2,12 @@ package com.yao.feicui.newsapp.ui;
 
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,20 +16,30 @@ import com.yao.feicui.newsapp.FragmentMain;
 import com.yao.feicui.newsapp.R;
 
 
+import com.yao.feicui.newsapp.common.HttpURLConnectionUtil;
+import com.yao.feicui.newsapp.common.bean.NewsBean;
+import com.yao.feicui.newsapp.common.parse.NewsParse;
+import com.yao.feicui.newsapp.ui.adapter.NewsAdapter;
 import com.yao.feicui.newsapp.ui.base.FragmentMenuRight;
 import com.yao.feicui.newsapp.ui.base.MyBaseActivity;
 import com.yao.feicui.newsapp.view.slidingmenu.SlidingMenu;
 
+import java.util.ArrayList;
+
 /**
  * Created by 16245 on 2016/06/02.
  */
-public class ActivityMain extends MyBaseActivity {
+public class ActivityMain extends MyBaseActivity implements AdapterView.OnItemClickListener {
     private FragmentMenu fragmentMenu;
     private FragmentMenuRight fragmentMenuRight;
     private FragmentMain fragmentMain;
     public static SlidingMenu slidingMenu;
     private TextView textView_title;
+    private ListView mListView;
     private ImageView iv_set, iv_user;
+    private static int mWhat = 1;
+    private NewsAdapter mAdapter;
+    private ArrayList<NewsBean.DataBean> jsonList = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle arg0) {
@@ -34,33 +48,60 @@ public class ActivityMain extends MyBaseActivity {
         textView_title = (TextView) findViewById(R.id.textView1);
         iv_set = (ImageView) findViewById(R.id.imageView_set);
         iv_user = (ImageView) findViewById(R.id.imageView_user);
+        mListView = (ListView) findViewById(R.id.lv_news_listview);
         iv_set.setOnClickListener(onClickListener);
         iv_user.setOnClickListener(onClickListener);
+        mListView.setOnItemClickListener(this);
 //        showFragmentMain();
         idinitSlidingMenu();
+        //解析json数据
+        new Thread() {
+            @Override
+            public void run() {
+                String json11 = "http://118.244.212.82:9092/newsClient/news_list?" +
+                        "ver=4&subid=1&dir=1&nid=2&stamp=20150601&cnt=20";
+                String json = HttpURLConnectionUtil.getHttpJson(json11);
+                jsonList = NewsParse.parseNewsJson(json);
+                handler.sendEmptyMessage(mWhat);
+            }
+        }.start();
 
     }
-private View.OnClickListener onClickListener=new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.imageView_set:
-                if (slidingMenu != null && slidingMenu.isMenuShowing()) {
-                    slidingMenu.showContent();
-                } else if (slidingMenu != null) {
-                    slidingMenu.showMenu();
-                }
-                break;
-            case R.id.imageView_user:
-                if (slidingMenu != null && slidingMenu.isMenuShowing()) {
-                    slidingMenu.showContent();
-                } else if (slidingMenu != null) {
-                    slidingMenu.showSecondaryMenu();
-                }
-                break;
+
+    protected Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    mAdapter = new NewsAdapter(ActivityMain.this, jsonList, mListView);
+                    mListView.setAdapter(mAdapter);
+                    break;
+            }
+
         }
-    }
-};
+    };
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.imageView_set:
+                    if (slidingMenu != null && slidingMenu.isMenuShowing()) {
+                        slidingMenu.showContent();
+                    } else if (slidingMenu != null) {
+                        slidingMenu.showMenu();
+                    }
+                    break;
+                case R.id.imageView_user:
+                    if (slidingMenu != null && slidingMenu.isMenuShowing()) {
+                        slidingMenu.showContent();
+                    } else if (slidingMenu != null) {
+                        slidingMenu.showSecondaryMenu();
+                    }
+                    break;
+            }
+        }
+    };
+
     //初始化侧滑菜单
     public void idinitSlidingMenu() {
         fragmentMenu = new FragmentMenu();
@@ -112,5 +153,11 @@ private View.OnClickListener onClickListener=new View.OnClickListener() {
         } else {
             finish();
         }
+    }
+
+    //listview设置监听事件
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
     }
 }
