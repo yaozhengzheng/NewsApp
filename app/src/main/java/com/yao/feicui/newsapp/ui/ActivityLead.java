@@ -39,24 +39,6 @@ public class ActivityLead extends MyBaseActivity {
             startActivity(new Intent(ActivityLead.this,ActivityLogo.class));
             finish();
         }
-//        viewpager = (ViewPager) findViewById(R.id.viewpager);
-//        viewpager.setOnPageChangeListener(listener);
-//        //设置每一个界面的样式
-//        List<View> viewList = new ArrayList<>();
-//        viewList.add(getLayoutInflater().inflate(R.layout.lead_1, null));
-//        viewList.add(getLayoutInflater().inflate(R.layout.lead_2, null));
-//        viewList.add(getLayoutInflater().inflate(R.layout.lead_3, null));
-//        viewList.add(getLayoutInflater().inflate(R.layout.lead_4, null));
-//        points[0] = (ImageView) findViewById(R.id.iv_p1);
-//        points[1] = (ImageView) findViewById(R.id.iv_p2);
-//        points[2] = (ImageView) findViewById(R.id.iv_p3);
-//        points[3] = (ImageView) findViewById(R.id.iv_p4);
-//        setPoint(0);
-//        //初始化适配器
-//        adapter = new LeadImgAdapter(viewList);
-//        //设置适配器
-//        viewpager.setAdapter(adapter);
-
     }
 private void initViewPager(){
     viewpager = (ViewPager) findViewById(R.id.viewpager);
