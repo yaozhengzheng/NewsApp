@@ -9,12 +9,12 @@
         android:layout_weight="0"
         layout="@layout/activity_main_title" />
 
-    <ListView
+    <com.yao.feicui.newsapp.ui.ReFlashListView
         android:dividerHeight="2dp"
         android:divider="@color/red"
         android:id="@+id/lv_news_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </ListView>
+    </com.yao.feicui.newsapp.ui.ReFlashListView>
 </LinearLayout>

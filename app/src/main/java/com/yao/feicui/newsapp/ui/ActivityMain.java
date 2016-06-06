@@ -20,7 +20,6 @@ import com.yao.feicui.newsapp.common.HttpURLConnectionUtil;
 import com.yao.feicui.newsapp.common.bean.NewsBean;
 import com.yao.feicui.newsapp.common.parse.NewsParse;
 import com.yao.feicui.newsapp.ui.adapter.NewsAdapter;
-import com.yao.feicui.newsapp.ui.base.FragmentMenuRight;
 import com.yao.feicui.newsapp.ui.base.MyBaseActivity;
 import com.yao.feicui.newsapp.view.slidingmenu.SlidingMenu;
 
@@ -29,13 +28,13 @@ import java.util.ArrayList;
 /**
  * Created by 16245 on 2016/06/02.
  */
-public class ActivityMain extends MyBaseActivity implements AdapterView.OnItemClickListener {
+public class ActivityMain extends MyBaseActivity implements AdapterView.OnItemClickListener, ReFlashListView.IReFlashListener {
     private FragmentMenu fragmentMenu;
     private FragmentMenuRight fragmentMenuRight;
     private FragmentMain fragmentMain;
     public static SlidingMenu slidingMenu;
     private TextView textView_title;
-    private ListView mListView;
+    private ReFlashListView mListView;
     private ImageView iv_set, iv_user;
     private static int mWhat = 1;
     private NewsAdapter mAdapter;
@@ -48,7 +47,8 @@ public class ActivityMain extends MyBaseActivity implements AdapterView.OnItemCl
         textView_title = (TextView) findViewById(R.id.textView1);
         iv_set = (ImageView) findViewById(R.id.imageView_set);
         iv_user = (ImageView) findViewById(R.id.imageView_user);
-        mListView = (ListView) findViewById(R.id.lv_news_listview);
+        mListView = (ReFlashListView) findViewById(R.id.lv_news_listview);
+        mListView.setInterface(this);
         iv_set.setOnClickListener(onClickListener);
         iv_user.setOnClickListener(onClickListener);
         mListView.setOnItemClickListener(this);
@@ -155,9 +155,19 @@ public class ActivityMain extends MyBaseActivity implements AdapterView.OnItemCl
         }
     }
 
-    //listview设置监听事件
+    //listView设置监听事件
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    }
+
+    @Override
+    public void onReFlash() {
+        //获取最新数据
+
+        // 通知界面显示数据
+
+       //通知listView刷新数据完毕
+      mListView.reFlashComplete();
     }
 }

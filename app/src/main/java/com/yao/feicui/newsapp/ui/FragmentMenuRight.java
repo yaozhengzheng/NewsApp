@@ -1,4 +1,4 @@
-package com.yao.feicui.newsapp.ui.base;
+package com.yao.feicui.newsapp.ui;
 
 
 import android.app.Fragment;
