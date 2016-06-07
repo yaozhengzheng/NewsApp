@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 
+import com.tencent.stat.StatService;
 import com.yao.feicui.newsapp.R;
 import com.yao.feicui.newsapp.common.SharedPreferenceUtils;
 import com.yao.feicui.newsapp.ui.adapter.LeadImgAdapter;
@@ -31,6 +32,8 @@ public class ActivityLead extends MyBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lead);
+
+        StatService.trackCustomEvent(this, "onCreate", "");
         //判断是否是第一次登录
         if (TextUtils.isEmpty(SharedPreferenceUtils.getSP(this, "FirstLand"))) {
             initViewPager(); //初次登陆时的图片翻页效果

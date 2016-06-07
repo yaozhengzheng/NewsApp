@@ -1,13 +1,14 @@
 package com.yao.feicui.newsapp.ui;
 
 
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 /**
  * Created by 16245 on 2016/06/02.
  */
-public class ActivityMain extends MyBaseActivity implements AdapterView.OnItemClickListener, ReFlashListView.IReFlashListener {
+public class ActivityMain extends MyBaseActivity implements AdapterView.OnItemClickListener, ReFlashListView.IReFlashListener{
     private FragmentMenu fragmentMenu;
     private FragmentMenuRight fragmentMenuRight;
     private FragmentMain fragmentMain;
@@ -67,7 +68,6 @@ public class ActivityMain extends MyBaseActivity implements AdapterView.OnItemCl
         }.start();
 
     }
-
     protected Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -158,7 +158,12 @@ public class ActivityMain extends MyBaseActivity implements AdapterView.OnItemCl
     //listView设置监听事件
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        // 打开显示当前选中的新闻
+//        Toast.makeText(ActivityMain.this,"aaaaa",Toast.LENGTH_SHORT).show();
+//        News news = (News) parent.getItemAtPosition(position);
+        Intent intent = new Intent(ActivityMain.this, ActivityShow.class);
+        intent.putExtra("url",mAdapter.getItem(position).getLink());
+        startActivity(intent);
     }
 
     @Override

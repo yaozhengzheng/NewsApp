@@ -1,4 +1,4 @@
-package com.yao.feicui.newsapp.modle.biz;
+package com.yao.feicui.newsapp.modle.modle;
 
 /**
  * Created by 16245 on 2016/06/02.

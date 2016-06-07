@@ -19,6 +19,10 @@
         </activity>
         <activity android:name=".ui.ActivityMain">
         </activity>
+        <activity android:name=".ui.ActivityShow">
+        </activity>
+        <activity android:name=".ui.ActivityComment">
+        </activity>
     </application>
 
 </manifest>

@@ -11,13 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.yao.feicui.newsapp.R;
 
 /**
  * Created by 16245 on 2016/06/02.
  */
-public class FragmentMenuRight extends Fragment {
+public class FragmentMenuRight extends Fragment{
     private View view;
     private RelativeLayout relativeLayout_logined;
     private RelativeLayout relativeLayout_unlogin;
@@ -37,4 +36,5 @@ public class FragmentMenuRight extends Fragment {
         updateTv= (TextView) view.findViewById(R.id.update_version);
         return view;
     }
+
 }
