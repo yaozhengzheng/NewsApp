@@ -46,8 +46,9 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/imageView_menu"
             android:background="#eecccccc"
-            android:text="跟贴"
-            android:textColor="#ff000000"/>
+            android:text="分享"
+            android:textColor="#ff000000"
+            android:autoText="false"/>
     </RelativeLayout>
 
     <ProgressBar
