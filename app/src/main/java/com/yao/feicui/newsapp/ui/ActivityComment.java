@@ -3,7 +3,10 @@ package com.yao.feicui.newsapp.ui;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -11,12 +14,16 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.sdk.modelmsg.WXImageObject;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.sdk.modelmsg.WXTextObject;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.yao.feicui.newsapp.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 
 
 /**
@@ -47,11 +54,15 @@ public class ActivityComment extends Activity {
     }
 
     //请求生成一个唯一的标识
-    private String buildTransaction(final String type){
-        return (type==null)?String.valueOf(System.
-                currentTimeMillis()):type+System.currentTimeMillis();
+    private String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.
+                currentTimeMillis()) : type + System.currentTimeMillis();
     }
-    //向好友或朋友圈发送文本
+
+    /**
+     * 向好友或朋友圈发送文本
+     */
+
     public void onClick_send(View view) {
         //动态创建EditText，用于输入文本
         final EditText editor = new EditText(this);
@@ -72,39 +83,131 @@ public class ActivityComment extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //获取待分享文本
-             String text=editor.getText().toString();
-                if (text==null||text.length()==0){
+                String text = editor.getText().toString();
+                if (text == null || text.length() == 0) {
                     return;
                 }
 
                 //第一步：创建一个用于封装待分享文本的WXTextObject对象
-                WXTextObject textObj=new WXTextObject();
-                textObj.text=text;
+                WXTextObject textObj = new WXTextObject();
+                textObj.text = text;
 
                 //第二步： 创建WXMediaMessage对象，该对象用于Android客户端向微信发送数据
-                WXMediaMessage msg=new WXMediaMessage();
-                msg.mediaObject=textObj;
-                msg.description=text;//设置一个描述
+                WXMediaMessage msg = new WXMediaMessage();
+                msg.mediaObject = textObj;
+                msg.description = text;//设置一个描述
 
                 //第三步： 创建一个请求微信客户端的SendMessageToWX.Req对象
-                SendMessageToWX.Req req=new SendMessageToWX.Req();
-                req.message=msg;
+                SendMessageToWX.Req req = new SendMessageToWX.Req();
+                req.message = msg;
                 //设置唯一的标识
-                req.transaction=buildTransaction("Text");
+                req.transaction = buildTransaction("Text");
                 //表示发送给朋友还是朋友圈
-                req.scene=mShareFriends.isChecked()?
-                        SendMessageToWX.Req.WXSceneTimeline:
+                req.scene = mShareFriends.isChecked() ?
+                        SendMessageToWX.Req.WXSceneTimeline :
                         SendMessageToWX.Req.WXSceneSession;
 
                 // 第四步：发送给微信客户端
-                Toast.makeText(ActivityComment.this,String.valueOf
+                Toast.makeText(ActivityComment.this, String.valueOf
                         (api.sendReq(req)), Toast.LENGTH_SHORT).show();
             }
         });
-        builder.setNegativeButton("取消",null);
-        final AlertDialog alert=builder.create();
+        builder.setNegativeButton("取消", null);
+        final AlertDialog alert = builder.create();
         alert.show();
+    }
 
 
+    //将bitmap装换成byte格式的数组
+private byte[]bmpToByteArray(final Bitmap bitmap,final boolean needRecycle){
+    ByteArrayOutputStream output=new ByteArrayOutputStream();
+    bitmap.compress(Bitmap.CompressFormat.PNG,100,output);
+    if (needRecycle){
+        bitmap.recycle();
+    }
+    byte[]result=output.toByteArray();
+    try {
+        output.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return result;
+}
+    /**
+     *  发送二进制图像
+     */
+    public void onClick_binary(View view){
+
+        //第一步：获取二进制图像的Bitmap对象
+        Bitmap bitmap= BitmapFactory.decodeResource
+                (getResources(), R.drawable.city);
+        Log.d("abc", String.valueOf(bitmap));
+        //第二步：创建WXImageObject对象，并包装Bitmap
+        WXImageObject imgObj=new WXImageObject(bitmap);
+
+        //第三步：创建WXMediaMessage对象，并包装WXImageObject
+        WXMediaMessage msg=new WXMediaMessage();
+        msg.mediaObject=imgObj;
+
+        //第四步：压缩图像
+//        Bitmap thumbBmp=Bitmap.createScaledBitmap(bitmap,120,150,true);
+//        //释放图像所占用的内存资源
+//        bitmap.recycle();
+//        //设置缩略图
+//        msg.thumbData=bmpToByteArray(thumbBmp,true);
+//        Log.d("abd", String.valueOf(thumbBmp));
+        //第五步：创建SendMessageToWX.Req对象，用于发送数据
+        SendMessageToWX.Req req=new SendMessageToWX.Req();
+        //发送图片标识
+        req.transaction=buildTransaction("img");
+        req.message=msg;
+        //设置是否发送到朋友圈
+        req.scene=mShareFriends.isChecked()?
+                SendMessageToWX.Req.WXSceneTimeline:
+                SendMessageToWX.Req.WXSceneSession;
+        Toast.makeText(this, String.valueOf(api.sendReq(req)),
+                Toast.LENGTH_LONG).show();
+        finish();
+    }
+    /**
+     * 发送本地图像
+     */
+    public void onClick_local(View view){
+        //第一步：判断图像文件是否存在
+        String path="sdcard/DCIM/Camera/IMG_20160120_185917.jpg";
+        File file=new File(path);
+        if (!file.exists()){
+            Toast.makeText(ActivityComment.this, "文件不存在", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //第二步：创建WXImageObject对象，并包装Bitmap
+        WXImageObject imgObj=new WXImageObject();
+        //设置文件图像的路径
+        imgObj.setImagePath(path);
+
+        //第三步：创建WXMediaMessage对象，并包装WXImageObject
+        WXMediaMessage msg=new WXMediaMessage();
+        msg.mediaObject=imgObj;
+
+        //第四步：压缩图像
+        Bitmap bitmap=BitmapFactory.decodeFile(path);
+//        Bitmap thumbBmp=Bitmap.createScaledBitmap(bitmap,120,150,true);
+        //释放图像所占用的内存资源
+//        bitmap.recycle();
+        //设置缩略图
+//        msg.thumbData=bmpToByteArray(thumbBmp,true);
+//        Log.d("abd", String.valueOf(thumbBmp));
+        //第五步：创建SendMessageToWX.Req对象，用于发送数据
+        SendMessageToWX.Req req=new SendMessageToWX.Req();
+        //发送图片标识
+        req.transaction=buildTransaction("img");
+        req.message=msg;
+        //设置是否发送到朋友圈
+        req.scene=mShareFriends.isChecked()?
+                SendMessageToWX.Req.WXSceneTimeline:
+                SendMessageToWX.Req.WXSceneSession;
+        Toast.makeText(this, String.valueOf(api.sendReq(req)),
+                Toast.LENGTH_LONG).show();
+        finish();
     }
 }

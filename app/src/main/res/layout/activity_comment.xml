@@ -5,13 +5,20 @@
               android:orientation="vertical"
     >
 
+    <CheckBox
+        android:id="@+id/checkBox_share_friend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="分享到朋友圈"/>
+
     <Button
         android:id="@+id/button_weiXin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onClick_weiXin"
         android:text="启动微信"
-        android:textSize="50dp"/>
+        />
 
     <Button
         android:id="@+id/button_send"
@@ -20,10 +27,34 @@
         android:onClick="onClick_send"
         android:text="发送文本"/>
 
-    <CheckBox
-        android:id="@+id/checkBox_share_friend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="false"
-        android:text="分享到朋友圈"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="二进制图片"
+            android:id="@+id/button_binary_image"
+            android:layout_weight="1"
+            android:onClick="onClick_binary"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="本地图像"
+            android:id="@+id/button_local_image"
+            android:layout_weight="1"
+            android:onClick="onClick_local"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="URL图像"
+            android:id="@+id/button_url_image"
+            android:layout_weight="1"
+            android:onClick="onClick_url"/>
+    </LinearLayout>
+
 </LinearLayout>
