@@ -1,4 +1,7 @@
 package com.yao.feicui.newsapp.ui;
+/**
+ * 下拉刷新
+ */
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -18,7 +21,6 @@ import com.yao.feicui.newsapp.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.zip.Inflater;
 
 /**
  * Created by 16245 on 2016/06/06.
@@ -250,7 +252,7 @@ public class ReFlashListView extends ListView implements AbsListView.OnScrollLis
     }
 
     /**
-     * 刷新数据接口
+     * 刷新数据接口0
      */
     public interface IReFlashListener {
         public void onReFlash();

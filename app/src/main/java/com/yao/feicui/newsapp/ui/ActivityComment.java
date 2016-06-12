@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.sdk.modelmsg.WXImageObject;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.sdk.modelmsg.WXMusicObject;
 import com.tencent.mm.sdk.modelmsg.WXTextObject;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
@@ -24,6 +25,7 @@ import com.yao.feicui.newsapp.R;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 
 /**
@@ -173,7 +175,7 @@ private byte[]bmpToByteArray(final Bitmap bitmap,final boolean needRecycle){
      * 发送本地图像
      */
     public void onClick_local(View view){
-        //第一步：判断图像文件是否存在
+        //第一步：判断图像文件是否存在，并设置path
         String path="sdcard/DCIM/Camera/IMG_20160120_185917.jpg";
         File file=new File(path);
         if (!file.exists()){
@@ -209,5 +211,48 @@ private byte[]bmpToByteArray(final Bitmap bitmap,final boolean needRecycle){
         Toast.makeText(this, String.valueOf(api.sendReq(req)),
                 Toast.LENGTH_LONG).show();
         finish();
+    }
+  /*  *//**
+     * 发送URL图像
+     *//*
+    public void onClick_url(View view){
+        //安卓不能在主程序中访问网络，所以用线程
+        Thread thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+               try{
+                   //第一步：创建WXImageObject对象，并设置URL
+                   URL url=new URL("http://image.xinmin.cn/2011/09/26/20110926093910045512.jpg");
+                   WXImageObject imgObj=new WXImageObject();
+                   //设置文件图像的Url
+                   //第三步：创建WXMediaMessage对象，并包装WXImageObject
+                   WXMediaMessage msg=new WXMediaMessage();
+                   msg.mediaObject=imgObj;
+
+                   //第五步：创建SendMessageToWX.Req对象，用于发送数据
+                   SendMessageToWX.Req req=new SendMessageToWX.Req();
+                   //发送图片标识
+                   req.transaction=buildTransaction("img");
+                   req.message=msg;
+                   //设置是否发送到朋友圈
+                   req.scene=mShareFriends.isChecked()?
+                           SendMessageToWX.Req.WXSceneTimeline:
+                           SendMessageToWX.Req.WXSceneSession;
+                   Toast.makeText(ActivityComment.this, String.valueOf(api.sendReq(req)),Toast.LENGTH_LONG).show();
+                   finish();
+               }catch (Exception e){
+                   e.printStackTrace();
+               }
+            }
+        });
+    }*/
+    /**
+     * 发送URL音频
+     */
+    public void send_url_audio(View view){
+        //第一步：创建WXMusicObject对象，用来指定url音频
+        WXMusicObject music=new WXMusicObject();
+        music.musicUrl="http://music.baidu.com/song/999104?pst=sug";
+
     }
 }

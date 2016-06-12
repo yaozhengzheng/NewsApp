@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -51,6 +52,13 @@ public class ActivityShow extends MyBaseActivity {
                 if (newProgress >= 100) {
                     mProgressBar.setVisibility(View.GONE);
                 }
+                //缩放
+                WebSettings settings = mWebView.getSettings();
+                settings.setUseWideViewPort(true);//设定支持viewport
+                settings.setLoadWithOverviewMode(true);   //自适应屏幕
+                settings.setBuiltInZoomControls(true);
+                settings.setDisplayZoomControls(false);
+                settings.setSupportZoom(true);//设定支持缩放
             }
         };
         mWebView.setWebChromeClient(client);
@@ -98,4 +106,5 @@ public class ActivityShow extends MyBaseActivity {
             }
         }
     };
+
 }
