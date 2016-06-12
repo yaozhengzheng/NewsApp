@@ -21,6 +21,8 @@ import com.yao.feicui.newsapp.ui.base.MyBaseActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * Created by 16245 on 2016/06/02.
  */
@@ -33,7 +35,6 @@ public class ActivityLead extends MyBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lead);
-
         StatService.trackCustomEvent(this, "onCreate", "");
         //判断是否是第一次登录
         if (TextUtils.isEmpty(SharedPreferenceUtils.getSP(this, "FirstLand"))) {
