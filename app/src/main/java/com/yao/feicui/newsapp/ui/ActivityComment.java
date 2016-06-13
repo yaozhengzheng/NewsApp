@@ -119,7 +119,12 @@ public class ActivityComment extends Activity {
         alert.show();
     }
 
-
+    /**
+     * 压缩图片功能不能使用
+     * @param bitmap
+     * @param needRecycle
+     * @return
+     */
     //将bitmap装换成byte格式的数组
 private byte[]bmpToByteArray(final Bitmap bitmap,final boolean needRecycle){
     ByteArrayOutputStream output=new ByteArrayOutputStream();
