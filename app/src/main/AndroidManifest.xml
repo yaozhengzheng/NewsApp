@@ -49,6 +49,8 @@
         </activity>
         <activity android:name=".ui.ActivityComment">
         </activity>
+        <activity android:name=".ui.ActivityPhoto">
+        </activity>
         <!-- Required SDK核心功能-->
         <activity
             android:name="cn.jpush.android.ui.PushActivity"

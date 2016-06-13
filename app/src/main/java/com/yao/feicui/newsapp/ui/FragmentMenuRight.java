@@ -2,6 +2,7 @@ package com.yao.feicui.newsapp.ui;
 
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.yao.feicui.newsapp.R;
 
 /**
+ * 右边策划界面
  * Created by 16245 on 2016/06/02.
  */
 public class FragmentMenuRight extends Fragment{
@@ -22,6 +24,7 @@ public class FragmentMenuRight extends Fragment{
     private RelativeLayout relativeLayout_unlogin;
     private ImageView imageView1;
     private TextView textView1, updateTv;
+    private ImageView fun_friend;
 
     @Nullable
     @Override
@@ -34,6 +37,13 @@ public class FragmentMenuRight extends Fragment{
         imageView1= (ImageView) view.findViewById(R.id.imageView1);
         textView1= (TextView) view.findViewById(R.id.textView1);
         updateTv= (TextView) view.findViewById(R.id.update_version);
+        fun_friend= (ImageView) view.findViewById(R.id.fun_friend);
+        fun_friend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(),ActivityComment.class));
+            }
+        });
         return view;
     }
 

@@ -253,6 +253,20 @@ private byte[]bmpToByteArray(final Bitmap bitmap,final boolean needRecycle){
         //第一步：创建WXMusicObject对象，用来指定url音频
         WXMusicObject music=new WXMusicObject();
         music.musicUrl="http://music.baidu.com/song/999104?pst=sug";
-
+       //第二步： 创建WXMediaMessage对象
+        WXMediaMessage message=new WXMediaMessage();
+        message.mediaObject=music;
+        message.title="向天再借五百年";
+        message.description="演唱：韩磊";
+        //创建 SendMessageToWX.Req对象
+        SendMessageToWX.Req req=new SendMessageToWX.Req();
+        req.transaction=buildTransaction("music");
+        req.message=message;
+        req.scene=mShareFriends.isChecked()?
+                SendMessageToWX.Req.WXSceneTimeline:
+                SendMessageToWX.Req.WXSceneSession;
+        Toast.makeText(this, String.valueOf(api.sendReq(req)),
+                Toast.LENGTH_LONG).show();
+        finish();
     }
 }
